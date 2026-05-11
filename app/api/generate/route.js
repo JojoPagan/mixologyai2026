@@ -61,8 +61,14 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
     // Generate recipe
     const recipeResponse = await openai.chat.completions.create({
       model: imageBase64 ? 'gpt-4o' : 'gpt-4o-mini',
-      messages,
-      max_tokens: 600,
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a world-class mixologist. Always respond with valid JSON only — no markdown, no extra text. Use exactly these fields: name (string), description (string), ingredients (array of strings), steps (array of strings).',
+        },
+        ...messages,
+      ],
+      max_tokens: 700,
       temperature: 0.9,
       response_format: { type: 'json_object' },
     });
