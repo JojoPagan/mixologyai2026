@@ -64,13 +64,18 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
       messages,
       max_tokens: 600,
       temperature: 0.9,
+      response_format: { type: 'json_object' },
     });
 
     let recipe;
     try {
-      recipe = JSON.parse(recipeResponse.choices[0].message.content.trim());
+      // Strip markdown code fences GPT sometimes wraps around JSON
+      const raw = recipeResponse.choices[0].message.content
+        .trim()
+        .replace(/^```(?:json)?\s*/i, '')
+        .replace(/\s*```$/, '');
+      recipe = JSON.parse(raw);
     } catch {
-      // Fallback: return raw text if JSON parse fails
       recipe = {
         name: 'Custom Creation',
         description: recipeResponse.choices[0].message.content,
