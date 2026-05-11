@@ -23,7 +23,8 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
   "name": "Creative drink name",
   "description": "One enticing sentence describing the drink",
   "ingredients": ["ingredient 1 with amount", "ingredient 2 with amount"],
-  "steps": ["Step 1 instruction", "Step 2 instruction", "Step 3 instruction"]
+  "steps": ["Step 1 instruction", "Step 2 instruction", "Step 3 instruction"],
+  "flavorProfile": ["Sweet", "Citrusy", "Refreshing"]
 }`;
     } else {
       const baseIngredients = [liquor, mixer, addOn].filter(Boolean).join(', ');
@@ -41,7 +42,8 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
   "name": "Creative drink name",
   "description": "One enticing sentence describing the drink",
   "ingredients": ["ingredient 1 with amount", "ingredient 2 with amount"],
-  "steps": ["Step 1 instruction", "Step 2 instruction", "Step 3 instruction"]
+  "steps": ["Step 1 instruction", "Step 2 instruction", "Step 3 instruction"],
+  "flavorProfile": ["Sweet", "Citrusy", "Refreshing"]
 }`;
     }
 
@@ -64,11 +66,11 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
       messages: [
         {
           role: 'system',
-          content: 'You are a world-class mixologist. Always respond with valid JSON only — no markdown, no extra text. Use exactly these fields: name (string), description (string), ingredients (array of strings), steps (array of strings).',
+          content: 'You are a world-class mixologist. Always respond with valid JSON only — no markdown, no extra text. Use exactly these fields: name (string), description (string), ingredients (array of strings), steps (array of strings), flavorProfile (array of 3-5 short flavor descriptor strings like "Sweet", "Smoky", "Citrusy", "Herbal", "Bitter", "Spicy", "Tropical", "Creamy", "Tart", "Earthy").',
         },
         ...messages,
       ],
-      max_tokens: 700,
+      max_tokens: 800,
       temperature: 0.9,
       response_format: { type: 'json_object' },
     });
