@@ -12,7 +12,6 @@ export async function POST(req) {
     let recipePrompt;
 
     if (imageBase64) {
-      // Photo scan mode — identify ingredients and craft a recipe
       recipePrompt = `You are a world-class mixologist. The user has sent a photo of ingredients, bottles, a drink menu, or a cocktail.
 Analyze the image and craft a creative ${drinkType} recipe based on what you see.
 ${moodLine}
@@ -47,7 +46,6 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
 }`;
     }
 
-    // Build messages array — include image if provided
     const messages = [
       {
         role: 'user',
@@ -60,9 +58,9 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
       },
     ];
 
-    // Generate recipe
+    // gpt-4.1-nano for text (fast), gpt-4.1-mini for vision (better multimodal)
     const recipeResponse = await openai.chat.completions.create({
-      model: imageBase64 ? 'gpt-4o' : 'gpt-4o-mini',
+      model: imageBase64 ? 'gpt-4.1-mini' : 'gpt-4.1-nano',
       messages: [
         {
           role: 'system',
@@ -77,7 +75,6 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
 
     let recipe;
     try {
-      // Strip markdown code fences GPT sometimes wraps around JSON
       const raw = recipeResponse.choices[0].message.content
         .trim()
         .replace(/^```(?:json)?\s*/i, '')
@@ -89,31 +86,11 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
         description: recipeResponse.choices[0].message.content,
         ingredients: [],
         steps: [],
+        flavorProfile: [],
       };
     }
 
-    // Generate drink image
-    let imageUrl = '';
-    try {
-      const imagePrompt = `A stunning, professional cocktail photography shot of "${recipe.name}".
-${recipe.description}.
-Dark moody bar atmosphere, cinematic lighting, shallow depth of field, garnished beautifully.
-${isMocktail ? 'Non-alcoholic drink, vibrant fresh ingredients.' : 'Premium spirits, elegant glassware.'}
-High-end editorial style, no text, no labels.`;
-
-      const imageResponse = await openai.images.generate({
-        model: 'dall-e-3',
-        prompt: imagePrompt,
-        n: 1,
-        size: '1024x1024',
-        quality: 'standard',
-      });
-      imageUrl = imageResponse.data[0].url;
-    } catch (imgErr) {
-      console.error('Image generation failed:', imgErr.message);
-    }
-
-    return NextResponse.json({ ...recipe, imageUrl });
+    return NextResponse.json(recipe);
   } catch (err) {
     console.error('API error:', err);
     return NextResponse.json({ error: 'Failed to generate recipe' }, { status: 500 });
