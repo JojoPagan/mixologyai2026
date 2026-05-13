@@ -21,6 +21,8 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
 {
   "name": "Creative drink name",
   "description": "One enticing sentence describing the drink",
+  "glassware": "Coupe",
+  "garnish": "Lemon twist",
   "ingredients": ["ingredient 1 with amount", "ingredient 2 with amount"],
   "steps": ["Step 1 instruction", "Step 2 instruction", "Step 3 instruction"],
   "flavorProfile": ["Sweet", "Citrusy", "Refreshing"]
@@ -40,6 +42,8 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
 {
   "name": "Creative drink name",
   "description": "One enticing sentence describing the drink",
+  "glassware": "Coupe",
+  "garnish": "Lemon twist",
   "ingredients": ["ingredient 1 with amount", "ingredient 2 with amount"],
   "steps": ["Step 1 instruction", "Step 2 instruction", "Step 3 instruction"],
   "flavorProfile": ["Sweet", "Citrusy", "Refreshing"]
@@ -64,7 +68,7 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
       messages: [
         {
           role: 'system',
-          content: 'You are a world-class mixologist. Always respond with valid JSON only — no markdown, no extra text. Use exactly these fields: name (string), description (string), ingredients (array of strings), steps (array of strings), flavorProfile (array of 3-5 short flavor descriptor strings like "Sweet", "Smoky", "Citrusy", "Herbal", "Bitter", "Spicy", "Tropical", "Creamy", "Tart", "Earthy").',
+          content: 'You are a world-class mixologist. Always respond with valid JSON only — no markdown, no extra text. Use exactly these fields: name (string), description (string), glassware (string — the specific glass the drink should be served in, e.g. "Coupe", "Highball", "Rocks", "Nick & Nora", "Collins", "Martini", "Champagne flute", "Copper mug"), garnish (string — the garnish, e.g. "Lemon twist", "Orange peel and Luxardo cherry", "Fresh mint sprig", "Cucumber ribbon"), ingredients (array of strings), steps (array of strings), flavorProfile (array of 3-5 short flavor descriptor strings like "Sweet", "Smoky", "Citrusy", "Herbal", "Bitter", "Spicy", "Tropical", "Creamy", "Tart", "Earthy").',
         },
         ...messages,
       ],
@@ -84,6 +88,8 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
       recipe = {
         name: 'Custom Creation',
         description: recipeResponse.choices[0].message.content,
+        glassware: '',
+        garnish: '',
         ingredients: [],
         steps: [],
         flavorProfile: [],
