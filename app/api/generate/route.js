@@ -4,9 +4,18 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   try {
-    const { liquor, mixer, addOn, isMocktail, mood, imageBase64 } = await req.json();
+    const { liquor, mixer, addOn, isMocktail, mood, imageBase64, drinkType: userDrinkType } =
+      await req.json();
 
-    const drinkType = isMocktail ? 'mocktail (non-alcoholic)' : 'cocktail';
+    // Resolve drinkType from explicit user input first (e.g. "Spritz",
+    // "Highball", "Old Fashioned"). Fall back to the binary cocktail/mocktail
+    // when not provided. Mocktail flag still wins for the non-alcoholic
+    // constraint regardless of what the user typed.
+    const baseCategory = isMocktail ? 'mocktail (non-alcoholic)' : 'cocktail';
+    const drinkType =
+      userDrinkType && typeof userDrinkType === 'string' && userDrinkType.trim()
+        ? `${userDrinkType.trim()}${isMocktail ? ' (non-alcoholic)' : ''}`
+        : baseCategory;
     const moodLine = mood ? `The vibe/mood should be: ${mood}.` : '';
 
     let recipePrompt;
