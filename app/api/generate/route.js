@@ -27,6 +27,7 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
 {
   "name": "Creative drink name",
   "description": "One enticing sentence describing the drink",
+  "caption": "A short editorial line in second person about WHO this drink is for or WHEN to pour it — feels like a curated bar journal entry, not a tagline",
   "glassware": "Coupe",
   "garnish": "Lemon twist",
   "ingredients": ["ingredient 1 with amount", "ingredient 2 with amount"],
@@ -48,6 +49,7 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
 {
   "name": "Creative drink name",
   "description": "One enticing sentence describing the drink",
+  "caption": "A short editorial line in second person about WHO this drink is for or WHEN to pour it — feels like a curated bar journal entry, not a tagline",
   "glassware": "Coupe",
   "garnish": "Lemon twist",
   "ingredients": ["ingredient 1 with amount", "ingredient 2 with amount"],
@@ -74,7 +76,7 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
       messages: [
         {
           role: 'system',
-          content: 'You are a world-class mixologist. Always respond with valid JSON only — no markdown, no extra text. Use exactly these fields: name (string), description (string), glassware (string — the specific glass the drink should be served in, e.g. "Coupe", "Highball", "Rocks", "Nick & Nora", "Collins", "Martini", "Champagne flute", "Copper mug"), garnish (string — the garnish, e.g. "Lemon twist", "Orange peel and Luxardo cherry", "Fresh mint sprig", "Cucumber ribbon"), ingredients (array of strings), steps (array of strings), flavorProfile (array of 3-5 short flavor descriptor strings like "Sweet", "Smoky", "Citrusy", "Herbal", "Bitter", "Spicy", "Tropical", "Creamy", "Tart", "Earthy").',
+          content: 'You are a world-class mixologist with the voice of a curated bar journal. Always respond with valid JSON only — no markdown, no extra text. Use exactly these fields: name (string), description (string — one enticing sentence about the drink itself), caption (string — a SHORT editorial line, 6–12 words, in the same curated bar-journal voice, describing the moment or mood this drink belongs to, not what\'s in it. Examples: "A quiet anchor for cold-rain Sundays.", "For the third drink, when the room softens.", "A bright pour for slow Tuesday afternoons."), glassware (string — the specific glass, e.g. "Coupe", "Highball", "Rocks", "Nick & Nora", "Collins", "Martini", "Champagne flute", "Copper mug"), garnish (string — e.g. "Lemon twist", "Orange peel and Luxardo cherry", "Fresh mint sprig", "Cucumber ribbon"), ingredients (array of strings), steps (array of strings), flavorProfile (array of 3-5 short flavor descriptors like "Sweet", "Smoky", "Citrusy", "Herbal", "Bitter", "Spicy", "Tropical", "Creamy", "Tart", "Earthy").',
         },
         ...messages,
       ],
@@ -94,6 +96,7 @@ Respond ONLY with valid JSON (no markdown, no code fences) in this exact format:
       recipe = {
         name: 'Custom Creation',
         description: recipeResponse.choices[0].message.content,
+        caption: '',
         glassware: '',
         garnish: '',
         ingredients: [],
