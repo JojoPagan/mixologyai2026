@@ -12,8 +12,14 @@ export async function POST(req) {
     let recipePrompt;
 
     if (imageBase64) {
-      recipePrompt = `You are a world-class mixologist. The user has sent a photo of ingredients, bottles, a drink menu, or a cocktail.
-Analyze the image and craft a creative ${drinkType} recipe based on what you see.
+      recipePrompt = `You are a world-class mixologist. The user has sent a photo.
+
+FIRST: decide whether the photo actually contains usable bar inputs — that is, beverage ingredients (fruit, herbs, syrups, mixers, garnishes), bottles or cans of spirits / wine / liqueur / sodas, a printed drink menu, OR an existing cocktail / mocktail glass.
+
+If the photo does NOT contain any of those (for example: a person, a pet, scenery, a screen, random objects), respond with EXACTLY this JSON and nothing else:
+{ "error": "NO_INGREDIENTS", "detail": "short note describing what you actually saw" }
+
+Otherwise, craft a creative ${drinkType} recipe based on what you see in the photo. Do not invent ingredients you cannot see. Only the things visible (plus standard pantry mixers like ice, water, simple syrup) belong in the recipe.
 ${moodLine}
 ${isMocktail ? 'This must be completely non-alcoholic — use juices, sodas, syrups, teas, and other non-alcoholic ingredients.' : ''}
 
