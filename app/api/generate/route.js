@@ -23,12 +23,14 @@ export async function POST(req) {
     if (imageBase64) {
       recipePrompt = `You are a world-class mixologist. The user has sent a photo.
 
-FIRST: decide whether the photo actually contains usable bar inputs — that is, beverage ingredients (fruit, herbs, syrups, mixers, garnishes), bottles or cans of spirits / wine / liqueur / sodas, a printed drink menu, OR an existing cocktail / mocktail glass.
+FIRST: decide whether the photo actually contains anything edible or drinkable — that is, ANY food, beverage, snack, candy, baked good, dessert, packaged food, fresh produce, herb, spice, sauce, syrup, condiment, dairy item, tea, coffee, soda, juice, water, spirit, wine, liqueur, mixer, garnish, a drink menu, or an existing cocktail / mocktail glass. A creative mixologist can draw flavor inspiration from anything edible — a donut suggests vanilla / glaze / cinnamon notes; a protein bar suggests chocolate / nut / caramel; a chocolate bar suggests cocoa / dessert profile; a piece of fruit suggests its juice and aroma. Treat ALL of these as valid inputs.
 
-If the photo does NOT contain any of those (for example: a person, a pet, scenery, a screen, random objects), respond with EXACTLY this JSON and nothing else:
+ONLY respond with the NO_INGREDIENTS error if the photo contains NOTHING edible or drinkable — for example: a person with no food in frame, a pet, outdoor scenery with no food, a screen / phone / laptop alone, a vehicle, a tool, an empty room, or pure abstract / random non-food objects. When in doubt, treat it as a valid input and craft a creative drink inspired by it.
+
+If you must respond with the error, use EXACTLY this JSON and nothing else:
 { "error": "NO_INGREDIENTS", "detail": "short note describing what you actually saw" }
 
-Otherwise, craft a creative ${drinkType} recipe based on what you see in the photo. Do not invent ingredients you cannot see. Only the things visible (plus standard pantry mixers like ice, water, simple syrup) belong in the recipe.
+Otherwise, craft a creative ${drinkType} recipe inspired by what you see. You may translate the flavor profile of a non-beverage food (e.g. donut → vanilla syrup + glaze rim; protein bar → chocolate bitters + hazelnut orgeat) into proper mixology ingredients. You can add standard bar pantry items (ice, water, simple syrup, citrus, common spirits / mixers appropriate to the drink type) to complete the recipe. The visible item should clearly drive the flavor direction.
 ${moodLine}
 ${isMocktail ? 'This must be completely non-alcoholic — use juices, sodas, syrups, teas, and other non-alcoholic ingredients.' : ''}
 
